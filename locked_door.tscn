@@ -1,0 +1,55 @@
+[gd_scene load_steps=7 format=3 uid="uid://c8juk2nliktr3"]
+
+[ext_resource type="Script" uid="uid://bv8dds5l5cfw2" path="res://locked_door.gd" id="1_x4nd7"]
+[ext_resource type="Texture2D" uid="uid://cdiujqegtohiv" path="res://dungeon_tiles-export.png" id="2_42grv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mq1x3"]
+atlas = ExtResource("2_42grv")
+region = Rect2(96, 208, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jcnc7"]
+atlas = ExtResource("2_42grv")
+region = Rect2(64, 208, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ix3nh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mq1x3")
+}],
+"loop": true,
+"name": &"closed",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jcnc7")
+}],
+"loop": true,
+"name": &"open",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c66mt"]
+radius = 15.3103
+
+[node name="LockedDoor" type="Area2D"]
+collision_mask = 8
+script = ExtResource("1_x4nd7")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_ix3nh")
+animation = &"closed"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_c66mt")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 5.0
+offset_top = -16.0
+offset_right = 39.0
+offset_bottom = 7.0
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

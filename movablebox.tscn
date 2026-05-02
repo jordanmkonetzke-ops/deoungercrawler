@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://7qosb8cgwn80"]
+
+[ext_resource type="Texture2D" uid="uid://cdiujqegtohiv" path="res://dungeon_tiles-export.png" id="1_phxdv"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_phxdv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_roem5"]
+size = Vector2(16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0vmpw"]
+atlas = ExtResource("1_phxdv")
+region = Rect2(160, 80, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ip73w"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0vmpw")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="movablebox" type="RigidBody2D"]
+collision_layer = 96
+collision_mask = 33
+mass = 1000.0
+physics_material_override = SubResource("PhysicsMaterial_phxdv")
+gravity_scale = 0.0
+linear_damp = 100.0
+angular_damp = 100.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_roem5")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ip73w")

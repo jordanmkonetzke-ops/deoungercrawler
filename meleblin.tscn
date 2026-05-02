@@ -1,0 +1,83 @@
+[gd_scene load_steps=9 format=3 uid="uid://cqosyxj3tm56k"]
+
+[ext_resource type="Script" uid="uid://dtwy7ehj61sbd" path="res://meleblin.gd" id="1_vu8v5"]
+[ext_resource type="Script" uid="uid://dekftdov6d5gm" path="res://bulletMelee.gd" id="2_7se3j"]
+[ext_resource type="Texture2D" uid="uid://bqm2yjs2g4pys" path="res://New Piskel - 2025-09-27T140040.036.png" id="2_rkfgl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2o812"]
+size = Vector2(200.753, 231.635)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3byeu"]
+atlas = ExtResource("2_rkfgl")
+region = Rect2(0, 0, 512, 512)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7se3j"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3byeu")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7lw44"]
+radius = 297.547
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rkewy"]
+radius = 875.357
+
+[node name="Meleblin" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 65
+script = ExtResource("1_vu8v5")
+
+[node name="hitbox" type="Area2D" parent="." groups=["bullet"]]
+position = Vector2(0, -5)
+scale = Vector2(-0.663338, -0.904033)
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hitbox"]
+position = Vector2(0, -3)
+scale = Vector2(0.04, 0.04)
+shape = SubResource("RectangleShape2D_2o812")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.04, 0.04)
+sprite_frames = SubResource("SpriteFrames_7se3j")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -3)
+scale = Vector2(0.04, 0.04)
+shape = SubResource("RectangleShape2D_2o812")
+
+[node name="Killbox" type="Area2D" parent="." groups=["bullet"]]
+scale = Vector2(0.588142, 0.706369)
+collision_layer = 16
+collision_mask = 9
+script = ExtResource("2_7se3j")
+
+[node name="AttackRange" type="CollisionShape2D" parent="Killbox"]
+scale = Vector2(0.04, 0.04)
+shape = SubResource("CircleShape2D_7lw44")
+
+[node name="view box" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+
+[node name="ViewRange" type="CollisionShape2D" parent="view box"]
+scale = Vector2(0.04, 0.04)
+shape = SubResource("CircleShape2D_rkewy")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[connection signal="area_entered" from="hitbox" to="." method="_on_hitbox_area_entered"]
+[connection signal="area_entered" from="Killbox" to="." method="_on_killbox_area_entered"]
+[connection signal="area_exited" from="Killbox" to="." method="_on_killbox_area_exited"]
+[connection signal="area_entered" from="view box" to="." method="_on_view_box_area_entered"]
+[connection signal="area_exited" from="view box" to="." method="_on_view_box_area_exited"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

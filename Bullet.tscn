@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://brhhr5kkwdlan"]
+
+[ext_resource type="Script" uid="uid://b6egc8stm216g" path="res://bullet.gd" id="1_4s4u5"]
+[ext_resource type="Texture2D" uid="uid://djabsoyelj3p2" path="res://New Piskel - 2025-10-11T121754.596.png" id="1_ayd6b"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4s4u5"]
+size = Vector2(64, 64)
+
+[node name="Bullet" type="Area2D" groups=["bullet"]]
+scale = Vector2(0.1, 0.1)
+collision_layer = 48
+collision_mask = 5
+script = ExtResource("1_4s4u5")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_ayd6b")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_4s4u5")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

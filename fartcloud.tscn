@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://jab7xfsopxqj"]
+
+[ext_resource type="Script" uid="uid://bs2kk6hjbw81r" path="res://fartcloud.gd" id="1_gisbx"]
+[ext_resource type="Texture2D" uid="uid://bpge888eliw1" path="res://New Piskel - 2026-03-14T131717.552.png" id="2_i5wth"]
+[ext_resource type="AudioStream" uid="uid://cpyabof7qfs8" path="res://fart-with-reverb.mp3" id="3_i5wth"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1wry8"]
+radius = 203.089
+
+[node name="FARTCLOUD" type="Area2D"]
+collision_layer = 0
+collision_mask = 8
+script = ExtResource("1_gisbx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1wry8")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.556863)
+position = Vector2(13, 7)
+texture = ExtResource("2_i5wth")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_i5wth")
+volume_db = 24.0
+autoplay = true
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

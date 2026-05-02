@@ -1,0 +1,125 @@
+[gd_scene load_steps=10 format=3 uid="uid://bihlogqf8wc3r"]
+
+[ext_resource type="Script" uid="uid://du1vxlfcru7uj" path="res://player.gd" id="1_onrkg"]
+[ext_resource type="Texture2D" uid="uid://d2p4teb7q0pf8" path="res://New Piskel - 2025-09-13T130106.701.png" id="2_i3pqv"]
+[ext_resource type="PackedScene" uid="uid://dy3hp0cfbyov5" path="res://Sword.tscn" id="3_i3pqv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2hs0m"]
+atlas = ExtResource("2_i3pqv")
+region = Rect2(0, 272, 204, 272)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hqtel"]
+atlas = ExtResource("2_i3pqv")
+region = Rect2(0, 0, 204, 272)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sweqy"]
+atlas = ExtResource("2_i3pqv")
+region = Rect2(204, 0, 204, 272)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1jxqw"]
+atlas = ExtResource("2_i3pqv")
+region = Rect2(204, 272, 204, 272)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dw050"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2hs0m")
+}],
+"loop": true,
+"name": &"down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hqtel")
+}],
+"loop": true,
+"name": &"left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sweqy")
+}],
+"loop": true,
+"name": &"right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1jxqw")
+}],
+"loop": true,
+"name": &"up",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_b26j0"]
+radius = 102.0
+height = 272.0
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+collision_layer = 32
+script = ExtResource("1_onrkg")
+speed = 100
+health = 10000000
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_dw050")
+animation = &"down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_b26j0")
+
+[node name="sword" parent="." instance=ExtResource("3_i3pqv")]
+position = Vector2(-80, -11)
+scale = Vector2(0.4, 0.4)
+
+[node name="UpPos" type="Marker2D" parent="."]
+position = Vector2(-2, -195)
+
+[node name="DownPos" type="Marker2D" parent="."]
+position = Vector2(2, 175)
+
+[node name="LeftPos" type="Marker2D" parent="."]
+position = Vector2(-190, 0)
+
+[node name="RightPos" type="Marker2D" parent="."]
+position = Vector2(211, 2)
+
+[node name="Hitbox" type="Area2D" parent="." groups=["player"]]
+collision_layer = 40
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(-1, 0)
+shape = SubResource("CapsuleShape2D_b26j0")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = -82.0
+offset_top = -320.0
+offset_right = 1311.0
+offset_bottom = -259.0
+scale = Vector2(3.88747, 3.88747)
+theme_override_font_sizes/normal_font_size = 44
+text = "10"
+
+[node name="FlickerSpeed" type="Timer" parent="."]
+wait_time = 0.104
+
+[node name="damage flicker last time timer" type="Timer" parent="FlickerSpeed"]
+wait_time = 0.7
+one_shot = true
+
+[node name="DamageTimer" type="Timer" parent="."]
+wait_time = 0.026
+autostart = true
+
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]
+[connection signal="area_exited" from="Hitbox" to="." method="_on_hitbox_area_exited"]
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
+[connection signal="body_exited" from="Hitbox" to="." method="_on_hitbox_body_exited"]
+[connection signal="timeout" from="FlickerSpeed" to="." method="_on_flicker_speed_timeout"]
+[connection signal="timeout" from="FlickerSpeed/damage flicker last time timer" to="." method="_on_damage_flicker_last_time_timer_timeout"]
+[connection signal="timeout" from="DamageTimer" to="." method="_on_damage_timer_timeout"]

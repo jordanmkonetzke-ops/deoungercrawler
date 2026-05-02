@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://dy3hp0cfbyov5"]
+
+[ext_resource type="Script" uid="uid://fix6k1jqkldr" path="res://sword.gd" id="1_tt53q"]
+[ext_resource type="Texture2D" uid="uid://cgdfkqg8vu2la" path="res://New Piskel - 2025-09-27T125902.515.png" id="2_tt53q"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oau4e"]
+atlas = ExtResource("2_tt53q")
+region = Rect2(0, 512, 448, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rw5gp"]
+atlas = ExtResource("2_tt53q")
+region = Rect2(0, 0, 448, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_js3bo"]
+atlas = ExtResource("2_tt53q")
+region = Rect2(448, 0, 448, 512)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_js3bo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oau4e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rw5gp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_js3bo")
+}],
+"loop": true,
+"name": &"default",
+"speed": 20.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tt53q"]
+size = Vector2(488, 519)
+
+[node name="Sword" type="Area2D" groups=["sword"]]
+collision_layer = 36
+collision_mask = 0
+script = ExtResource("1_tt53q")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_js3bo")
+autoplay = "default"
+frame_progress = 0.406507
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2, -1.5)
+shape = SubResource("RectangleShape2D_tt53q")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="animation_looped" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_looped"]

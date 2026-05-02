@@ -1,0 +1,138 @@
+[gd_scene load_steps=12 format=3 uid="uid://ljteu37k7dj8"]
+
+[ext_resource type="Script" uid="uid://rbdqravtkap6" path="res://bossblin.gd" id="1_ttycr"]
+[ext_resource type="Texture2D" uid="uid://ug42178tf77" path="res://New Piskel - 2026-02-16T164251.904.png" id="2_7idky"]
+[ext_resource type="PackedScene" uid="uid://brhhr5kkwdlan" path="res://Bullet.tscn" id="3_0pqcn"]
+[ext_resource type="Script" uid="uid://dekftdov6d5gm" path="res://bulletMelee.gd" id="3_qsfjl"]
+[ext_resource type="PackedScene" uid="uid://jab7xfsopxqj" path="res://fartcloud.tscn" id="3_rqmih"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7idky"]
+radius = 6.9
+height = 15.6
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2o812"]
+size = Vector2(200.753, 231.635)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0pqcn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_7idky")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qsfjl"]
+radius = 165.776
+height = 467.178
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rkewy"]
+radius = 778.621
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7idky"]
+radius = 6.20081
+
+[node name="Bossblin" type="CharacterBody2D"]
+scale = Vector2(10, 10)
+collision_mask = 65
+script = ExtResource("1_ttycr")
+bullet = ExtResource("3_0pqcn")
+fartcloud = ExtResource("3_rqmih")
+
+[node name="Shooting" type="Area2D" parent="."]
+collision_mask = 8
+
+[node name="GunRange" type="CollisionShape2D" parent="Shooting"]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_7idky")
+debug_color = Color(0.751124, 0.455918, 0.139164, 0.42)
+
+[node name="ShootTimer" type="Timer" parent="Shooting"]
+
+[node name="hitbox" type="Area2D" parent="." groups=["bullet"]]
+position = Vector2(0, -5)
+scale = Vector2(-0.663338, -0.904033)
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hitbox"]
+position = Vector2(-4.49278e-08, -5.53077)
+scale = Vector2(0.04, 0.04)
+shape = SubResource("RectangleShape2D_2o812")
+debug_color = Color(0.637066, 0.526332, 0, 0.42)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.04, 0.04)
+sprite_frames = SubResource("SpriteFrames_0pqcn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.04, 0.04)
+shape = SubResource("RectangleShape2D_2o812")
+
+[node name="Killbox" type="Area2D" parent="." groups=["bullet"]]
+scale = Vector2(0.588142, 0.706369)
+collision_layer = 16
+collision_mask = 9
+script = ExtResource("3_qsfjl")
+damage = 2
+
+[node name="AttackRange" type="CollisionShape2D" parent="Killbox"]
+position = Vector2(7.62939e-06, 0)
+scale = Vector2(0.04, 0.04)
+shape = SubResource("CapsuleShape2D_qsfjl")
+debug_color = Color(0.935734, 0.023273, 0.625292, 0.42)
+
+[node name="view box" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+
+[node name="ViewRange" type="CollisionShape2D" parent="view box"]
+scale = Vector2(0.04, 0.04)
+shape = SubResource("CircleShape2D_rkewy")
+debug_color = Color(0, 0.640028, 0.356048, 0.42)
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="Label" type="Label" parent="."]
+offset_left = -4.0
+offset_top = -14.1
+offset_right = 36.0
+offset_bottom = 8.9
+scale = Vector2(0.5, 0.5)
+theme_override_font_sizes/font_size = 14
+text = "10"
+
+[node name="invincibiltyframes" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+
+[node name="fart" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="fart"]
+scale = Vector2(1, 1)
+shape = SubResource("CircleShape2D_7idky")
+
+[node name="FARTTIMER" type="Timer" parent="fart"]
+wait_time = 1.5
+
+[connection signal="area_entered" from="Shooting" to="." method="_on_area_2d_area_entered"]
+[connection signal="area_exited" from="Shooting" to="." method="_on_area_2d_area_exited"]
+[connection signal="body_entered" from="Shooting" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Shooting" to="." method="_on_area_2d_body_exited"]
+[connection signal="timeout" from="Shooting/ShootTimer" to="." method="_on_shoot_timer_timeout"]
+[connection signal="area_entered" from="hitbox" to="." method="_on_hitbox_area_entered"]
+[connection signal="area_entered" from="Killbox" to="." method="_on_killbox_area_entered"]
+[connection signal="area_exited" from="Killbox" to="." method="_on_killbox_area_exited"]
+[connection signal="area_entered" from="view box" to="." method="_on_view_box_area_entered"]
+[connection signal="area_exited" from="view box" to="." method="_on_view_box_area_exited"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="invincibiltyframes" to="." method="_on_invincibiltyframes_timeout"]
+[connection signal="area_entered" from="fart" to="." method="_on_fart_area_entered"]
+[connection signal="area_exited" from="fart" to="." method="_on_fart_area_exited"]
+[connection signal="timeout" from="fart/FARTTIMER" to="." method="_on_farttimer_timeout"]

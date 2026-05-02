@@ -1,0 +1,57 @@
+[gd_scene load_steps=7 format=3 uid="uid://c2g1xp2kcjtwt"]
+
+[ext_resource type="Script" uid="uid://c4yve24exca6q" path="res://flabingo.gd" id="1_2n6rg"]
+[ext_resource type="Texture2D" uid="uid://d2uqffk2igb2a" path="res://New Piskel - 2025-12-06T121929.155.png" id="2_rnqld"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rdhrl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_rnqld")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tj74m"]
+radius = 80.6226
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_o52c6"]
+radius = 24.0
+height = 156.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_l25n6"]
+radius = 138.051
+
+[node name="Flabingo" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 128
+script = ExtResource("1_2n6rg")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-1, 61)
+sprite_frames = SubResource("SpriteFrames_rdhrl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_tj74m")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 135)
+shape = SubResource("CapsuleShape2D_o52c6")
+
+[node name="player point" type="Marker2D" parent="."]
+position = Vector2(2, 0)
+rotation = 1.63107
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(1, 0)
+collision_layer = 0
+collision_mask = 9
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-1, 0)
+shape = SubResource("CircleShape2D_l25n6")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="area_exited" from="Area2D" to="." method="_on_area_2d_area_exited"]
